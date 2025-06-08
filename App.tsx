@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native';
 import * as Yup from 'yup';
 import { Formik } from 'formik'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import SplashScreen from './src/components/SplashScreen';
 
 
 const PassWordSchema = Yup.object().shape({
@@ -15,6 +16,7 @@ const PassWordSchema = Yup.object().shape({
 
 const App = () => {
   const systemTheme = useColorScheme()
+  const [isSplashComplete, setIsSplashComplete] = useState(false);
 
   // Move all hooks inside the component
   const [password, setPassword] = useState("");
@@ -61,7 +63,12 @@ const App = () => {
 
   const bgColor = systemTheme === 'dark' ? "#212327" : "#c6d9f1";
   const txtColor = systemTheme === 'dark' ? "#CCDCF5" : "#212327";
+  const BtntxtColor = systemTheme === 'dark' ? "#212327" : "#CCDCF5";
   const boxBg = systemTheme === 'dark' ? "#7498BF" : "#090905";
+
+  if (!isSplashComplete) {
+    return <SplashScreen onFinish={() => setIsSplashComplete(true)} />;
+  }
 
   return (
     <SafeAreaView style={[styles.mainContainer, { backgroundColor: bgColor }]}>
@@ -156,7 +163,7 @@ const App = () => {
                   onPress={() => handleSubmit()}
                 >
 
-                  <Text>Generate</Text>
+                  <Text style={{ color: BtntxtColor }}>Generate</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.resetBtn}
                   onPress={() => {
@@ -164,7 +171,7 @@ const App = () => {
                     resetPassword();
                   }}
                 >
-                  <Text>Reset</Text>
+                  <Text style={{ color: BtntxtColor }}>Reset</Text>
                 </TouchableOpacity>
               </View>
             </>
