@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import SplashScreen from './src/components/SplashScreen';
-
+import Icon from 'react-native-vector-icons/Feather';
 
 const PassWordSchema = Yup.object().shape({
   passwordLength: Yup.number()
@@ -16,6 +16,7 @@ const PassWordSchema = Yup.object().shape({
 
 const App = () => {
   const systemTheme = useColorScheme()
+  const [isDarkMode, setIsDarkMode] = useState(systemTheme === 'dark');
   const [isSplashComplete, setIsSplashComplete] = useState(false);
 
   // Move all hooks inside the component
@@ -61,13 +62,13 @@ const App = () => {
     setSymbol(false);
   };
 
-  const bgColor = systemTheme === 'dark' ? "#212327" : "#c6d9f1";
-  const txtColor = systemTheme === 'dark' ? "#CCDCF5" : "#212327";
-  const BtntxtColor = systemTheme === 'dark' ? "#212327" : "#CCDCF5";
-  const boxBg = systemTheme === 'dark' ? "#7498BF" : "#090905";
+  const bgColor = isDarkMode ? "#212327" : "#c6d9f1";
+  const txtColor = isDarkMode  ? "#CCDCF5" : "#212327";
+  const BtntxtColor = isDarkMode ? "#212327" : "#21232";
+  const boxBg = isDarkMode  ? "#7498BF" : "#090905";
 
   if (!isSplashComplete) {
-    return <SplashScreen onFinish={() => setIsSplashComplete(true)} />;
+    return <SplashScreen onFinish={() => setIsSplashComplete(true)} />
   }
 
   return (
@@ -101,7 +102,7 @@ const App = () => {
           }) => (
             < >
               <View style={[styles.lengthBox]}>
-                <Text style={[styles.lengthBoxTxt]}>Enter the length</Text>
+                <Text style={[styles.lengthBoxTxt,{color:txtColor}]}>Enter the length</Text>
                 <TextInput value={values.passwordLength}
                   onChangeText={handleChange('passwordLength')}
                   placeholder='Ex. 8'
@@ -184,8 +185,16 @@ const App = () => {
           </Text>
 
         </View>)}
-
+      
+          
       </ScrollView>
+      <View style={[styles.iconContainer,{backgroundColor:bgColor}]}>
+          <TouchableOpacity onPress={() => setIsDarkMode(!isDarkMode)}>
+            {
+              isDarkMode ? <Icon name="sun" size={20} color={txtColor} /> : <Icon name="moon" size={20} color={txtColor} />
+            }
+          </TouchableOpacity>
+        </View>
     </SafeAreaView>
   );
 };
@@ -286,6 +295,18 @@ const styles = StyleSheet.create({
   passwordMsgTxt: {
     color: '#1A2414',
     fontSize: 15,
+  },
+  iconContainer: {
+    marginTop: 20,
+    borderRadius:25,
+    width:50,
+    height:50,
+    alignItems:'center',
+    justifyContent:'center',
+    position:'absolute',
+    bottom:20,
+    right:20,
+    
   }
 });
 
